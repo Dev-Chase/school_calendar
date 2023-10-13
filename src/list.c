@@ -6,7 +6,7 @@
 
 bool cmp_submitted(char *row, const char *status) {
   char *token = row;
-  for (uint_fast32_t i = 0; i < SUB_COL; i++) {
+  for (size_t i = 0; i < SUB_COL; i++) {
     token = strchr(token, ',') + 1;
   }
   return !strcmp(token, status);
@@ -22,7 +22,7 @@ bool cmp_class_all(char *row, const char *cmp_course) {
 
 bool filter_none(char *_, const char *_2) { return true; }
 
-void list_work(uint_fast32_t i, char *row) {
+void list_work(size_t i, char *row) {
   char *course = row;
   char *name = strchr(course, ',') + 1;
   char *due_date = strchr(name, ',') + 1;
@@ -36,11 +36,11 @@ void list_work(uint_fast32_t i, char *row) {
   dd.tm_sec = 0;
 
   double dif = difftime(mktime(&dd), now);
-  uint_fast32_t days = (uint_fast32_t)(dif / 3600 / 24);
-  uint_fast32_t hours = (dif - days * 3600 * 24) / 3600;
-  uint_fast32_t mins = (dif - days * 3600 * 24 - hours * 3600) / 60;
+  size_t days = (size_t)(dif / 3600 / 24);
+  size_t hours = (dif - days * 3600 * 24) / 3600;
+  size_t mins = (dif - days * 3600 * 24 - hours * 3600) / 60;
 
-  printf("\n%u - ", i);
+  printf("\n%zu - ", i);
   print_field(name);
   printf(" in ");
   print_field(course);
@@ -49,7 +49,7 @@ void list_work(uint_fast32_t i, char *row) {
   // printf("Due: %s", asctime(&dd));
   if (dif > 0 && strcmp(submitted, "True")) {
     puts("It isn't submitted yet.");
-    printf("Due: in %u days, %u hours, and %u minutes\v  -- %s", days, hours,
+    printf("Due: in %zu days, %zu hours, and %zu minutes\v  -- %s", days, hours,
            mins, asctime(&dd));
   } else if (!strcmp(submitted, "True")) {
     puts("It's already submitted.");
@@ -107,13 +107,13 @@ void list_works(DF works[static 1], const char *opt) {
   }
 
   // Number of Matching Rows
-  uint_fast32_t matching_n = 0;
+  size_t matching_n = 0;
 
   // Buffer to Hold Row Data
   char row_buff[MAX_ROW_LEN];
 
   char *sep;
-  for (uint_fast32_t i = 0; i < works->len_rows; i++) {
+  for (size_t i = 0; i < works->len_rows; i++) {
     fgets(row_buff, MAX_ROW_LEN, works->fp);
     fflush(stdin);
 

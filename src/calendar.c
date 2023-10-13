@@ -12,7 +12,7 @@ void create_scal_path(char *dest, const char *cal_path, const char *fname) {
 }
 
 bool cmp_field(const char *field, const char *cmp_field) {
-	uint_fast32_t i = 0;
+	size_t i = 0;
 	while (field[i] != ',' && cmp_field[i] != ',' && field[i] && cmp_field[i]) {
 		if (field[i] != cmp_field[i]) {
 			return false;
@@ -29,13 +29,13 @@ bool cmp_time(char *row, const char *cmp_time) {
 	char *token = row;
 
 	// Move Token Ptr to Due Date Field
-	for (uint_fast32_t i = 0; i < DUE_COL; i++) {
+	for (size_t i = 0; i < DUE_COL; i++) {
 		token = strchr(token, ',') + 1;
 	}
 
 	// Copy Due Date Data to due_str
 	char due_str[MAX_DATE_LEN - 1 + strlen(" - ") + MAX_TIME_LEN];
-	uint_fast32_t i = 0;
+	size_t i = 0;
 	while (token[i] != ',') {
 		due_str[i] = token[i];
 		i++;
@@ -58,14 +58,14 @@ bool cmp_time(char *row, const char *cmp_time) {
 }
 
 void print_field(const char *field) {
-	for (uint_fast32_t i = 0; field[i] != ',' && field[i] != '\0'; i++) {
+	for (size_t i = 0; field[i] != ',' && field[i] != '\0'; i++) {
 		printf("%c", field[i]);
 	}
 }
 
-bool in_arr(uint_fast32_t cmp_i, uint_fast32_t len,
-			const uint_fast32_t arr[static len]) {
-	for (uint_fast32_t i = 0; i < len; i++) {
+bool in_arr(size_t cmp_i, size_t len,
+			const size_t arr[static len]) {
+	for (size_t i = 0; i < len; i++) {
 		if (cmp_i == arr[i]) {
 			return true;
 		}
@@ -73,7 +73,7 @@ bool in_arr(uint_fast32_t cmp_i, uint_fast32_t len,
 	return false;
 }
 
-uint_fast32_t select_row(DF works[static 1], const char *opt) {
+size_t select_row(DF works[static 1], const char *opt) {
 	char input[MAX_NAME_LEN];
 	if (opt == NULL) {
 		list_works(works, "a");
@@ -88,18 +88,18 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 	if ((newline = strchr(input, '\n'))) {
 		*newline = '\0';
 	}
-	uint_fast32_t out;
+	size_t out;
 	char row_buff[MAX_ROW_LEN];
 	if ((out = atoi(input)) == 0) {
 		// Move FP Down One Line from Beg
 		fseek(works->fp, 0, SEEK_SET);
 		fscanf(works->fp, "%*[^\n]\n");
 
-		uint_fast32_t matching_len = 0;
-		uint_fast32_t *matching =
-			(uint_fast32_t *)malloc(sizeof(uint_fast32_t) * works->len_rows);
+		size_t matching_len = 0;
+		size_t *matching =
+			(size_t *)malloc(sizeof(size_t) * works->len_rows);
 
-		for (uint_fast32_t i = 0; i < works->len_rows; i++) {
+		for (size_t i = 0; i < works->len_rows; i++) {
 			fgets(row_buff, MAX_ROW_LEN, works->fp);
 
 			if ((newline = strchr(row_buff, '\n'))) {
@@ -121,7 +121,7 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 			fseek(works->fp, 0, SEEK_SET);
 			fscanf(works->fp, "%*[^\n]\n");
 
-			for (uint_fast32_t i = 0, x = 0; i < works->len_rows; i++) {
+			for (size_t i = 0, x = 0; i < works->len_rows; i++) {
 				fgets(row_buff, MAX_ROW_LEN, works->fp);
 				if (i + 1 == matching[x]) {
 					if ((newline = strchr(row_buff, '\n')) != NULL) {
@@ -133,7 +133,7 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 					char *due_date = strchr(name, ',') + 1;
 					char *submitted = strchr(due_date, ',') + 1;
 
-					printf("\n%u - ", matching[x]);
+					printf("\n%zu - ", matching[x]);
 					print_field(name);
 					printf(" in ");
 					print_field(course);
@@ -153,7 +153,7 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 			}
 			printf("There are multiple works matching that name, which index "
 				   "is it?: ");
-			scanf("%u", &out);
+			scanf("%zu", &out);
 			fflush(stdin);
 
 			if (!in_arr(out, matching_len, matching)) {
@@ -164,9 +164,9 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 
 		free(matching);
 	} else {
-		uint_fast32_t *range =
-			(uint_fast32_t *)malloc(sizeof(uint_fast32_t) * works->len_rows);
-		for (uint_fast32_t i = 0; i < works->len_rows; i++) {
+		size_t *range =
+			(size_t *)malloc(sizeof(size_t) * works->len_rows);
+		for (size_t i = 0; i < works->len_rows; i++) {
 			range[i] = i + 1;
 		}
 		if (!in_arr(out, works->len_rows, range)) {
@@ -182,7 +182,7 @@ uint_fast32_t select_row(DF works[static 1], const char *opt) {
 		fscanf(works->fp, "%*[^\n]\n");
 
 		// Loop Through Until out row
-		for (uint_fast32_t i = 0; i < out; i++) {
+		for (size_t i = 0; i < out; i++) {
 			fgets(row_buff, MAX_ROW_LEN, works->fp);
 		}
 		const char *name = strchr(row_buff, ',') + 1;

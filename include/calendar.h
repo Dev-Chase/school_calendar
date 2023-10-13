@@ -12,7 +12,7 @@ extern "C" {
 #include <time.h>
 
 typedef struct DataFrame {
-  uint_fast32_t len_rows;
+  size_t len_rows;
   FILE *fp;
 } DataFrame;
 typedef DataFrame DF;
@@ -40,7 +40,7 @@ typedef DataFrame DF;
 
 void create_scal_path(char *dest, const char *cal_path, const char *fname);
 bool cmp_field(const char *field, const char *cmp_field);
-uint_fast32_t select_row(DF works[static 1], const char *opt);
+size_t select_row(DF works[static 1], const char *opt);
 void open_data_frame(char *cal_path, DF *works);
 void print_field(const char *field);
 bool cmp_time(char *row, const char *cmp_time);

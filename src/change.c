@@ -28,7 +28,7 @@ void change_work_date(const char *cal_path, DF works[static 1], const char *opt)
 	}
 
 	// Find Work Row
-	uint_fast32_t sel_row = select_row(works, opt);
+	size_t sel_row = select_row(works, opt);
 	if (sel_row == 0) {
 		puts("no works match that name, cancelling");
 		puts("=========================================================");
@@ -67,7 +67,7 @@ void change_work_date(const char *cal_path, DF works[static 1], const char *opt)
 	char row_buff[MAX_ROW_LEN + 1]; // +1 for '\n'
 	// Loop Through Until sel_row
 	// (no need for -1 bc of column row)
-	uint_fast32_t i;
+	size_t i;
 	for (i = 0; i < sel_row; i++) {
 		fgets(row_buff, MAX_ROW_LEN + 1, works->fp);
 		fwrite(row_buff, 1, strlen(row_buff), temp_fp);
@@ -129,7 +129,7 @@ void change_work_name(const char *cal_path, DF works[static 1], const char *opt)
 	}
 
 	// Find Work Row
-	uint_fast32_t sel_row = select_row(works, opt);
+	size_t sel_row = select_row(works, opt);
 	if (sel_row == 0) {
 		puts("no works match that name, cancelling");
 		puts("=========================================================");
@@ -153,7 +153,7 @@ void change_work_name(const char *cal_path, DF works[static 1], const char *opt)
 	char row_buff[MAX_ROW_LEN + 1]; // +1 for '\n'
 	// Loop Through Until sel_row
 	// (no need for -1 bc of column row)
-	uint_fast32_t i;
+	size_t i;
 	for (i = 0; i < sel_row; i++) {
 		fgets(row_buff, MAX_ROW_LEN + 1, works->fp);
 		fwrite(row_buff, 1, strlen(row_buff), temp_fp);

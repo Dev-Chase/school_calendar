@@ -34,7 +34,7 @@ void submit_work(const char *cal_path, const char *opt, DF works[static 1]) {
 	char *replacement = (tolower(sub_or_unsub) == 's') ? "True\n" : "False\n";
 
 	// Find Work Row
-	uint_fast32_t sel_row = select_row(works, opt);
+	size_t sel_row = select_row(works, opt);
 	if (sel_row == 0) {
 		puts("no works match that name, cancelling");
 		puts("=========================================================");
@@ -47,7 +47,7 @@ void submit_work(const char *cal_path, const char *opt, DF works[static 1]) {
 	char row_buff[MAX_ROW_LEN + 1]; // +1 for '\n'
 	// Loop Through Until sel_row
 	// (no need for -1 bc of column row)
-	uint_fast32_t i;
+	size_t i;
 	for (i = 0; i < sel_row; i++) {
 		fgets(row_buff, MAX_ROW_LEN + 1, works->fp);
 		fwrite(row_buff, 1, strlen(row_buff), temp_fp);
